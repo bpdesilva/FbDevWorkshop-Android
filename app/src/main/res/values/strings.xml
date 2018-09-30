@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">FacebookWorkshop</string>
+    <string name="app_name">Dev Circles Workshop</string>
+    <string name="FACEBOOK_APP_ID">1969565793109226</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">[ACCOUNT_KIT_CLIENT_TOKEN]</string>
 </resources>
