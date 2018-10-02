@@ -24,7 +24,7 @@ public class NewsActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.news_list);
 
-        readRSS = new ReadNews(NewsActivity.this, recyclerView, "http://feeds.bbci.co.uk/news/world/asia/rss.xml");
+        readRSS = new ReadNews(NewsActivity.this, recyclerView, "https://newsapi.org/v2/everything?q=bitcoin&from=2018-09-02&sortBy=publishedAt&apiKey=daa06f7e6b084d0bb95a4512483aff03");
         readRSS.execute();
     }
 

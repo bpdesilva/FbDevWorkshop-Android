@@ -30,7 +30,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     }
 
     public static long getDateInMillis(String srcDate) {
-        SimpleDateFormat desiredFormat = new SimpleDateFormat("E, d MMMM yyyy hh:mm:ss z");
+        SimpleDateFormat desiredFormat = new SimpleDateFormat("E, d MMMM yyy hh:mm:ss z");
 
         long dateInMillis = 0;
         try {
@@ -59,7 +59,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         final String formattedDate = (String) DateUtils.getRelativeTimeSpanString(getDateInMillis(current.getPubDate()), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
         holder.Title.setText(current.getTitle());
-        holder.Date.setText(formattedDate);
+        //holder.Date.setText(formattedDate);
+        holder.Date.setText(current.getPubDate());
 
         Picasso.with(context).load(current.getThumbURL()).placeholder(R.drawable.sample).into(holder.ThumbNail);
 
@@ -69,7 +70,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
                 Intent intent = new Intent(context, NewsDetail.class);
                 intent.putExtra("description", current.getDescription());
                 intent.putExtra("title", current.getTitle());
-                intent.putExtra("date", formattedDate);
+                //intent.putExtra("date", formattedDate);
+                intent.putExtra("date", current.getPubDate());
                 intent.putExtra("image", current.getThumbURL());
                 context.startActivity(intent);
             }

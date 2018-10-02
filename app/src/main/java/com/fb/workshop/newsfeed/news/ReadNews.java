@@ -9,21 +9,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import com.fb.workshop.newsfeed.GetJSON;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 public class ReadNews extends AsyncTask<Void, Void, Void> {
 
@@ -32,7 +25,6 @@ public class ReadNews extends AsyncTask<Void, Void, Void> {
     ArrayList<FeedItem> feedItems;
     RecyclerView recyclerView;
     String address;
-    URL url;
     boolean isNetwork;
     List<OfflineItem> offlineItems;
     ProgressDialog pd;
@@ -65,7 +57,7 @@ public class ReadNews extends AsyncTask<Void, Void, Void> {
         Log.d("Network There", String.valueOf(isNetwork));
 
         if (isNetwork) {
-            ProcessXML(GetData());
+            ProcessJSON(GetData());
         } else {
             GetDBEntries();
         }
@@ -103,90 +95,64 @@ public class ReadNews extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private void ProcessXML(Document data) {
-        if (data != null) {
+    private void ProcessJSON(String jsonstring) {
+
+        feedItems = new ArrayList<>();
+        String rsslink = address;
+
+        Log.d("JSON String", jsonstring);
+
+
+        if (jsonstring != null) {
 
             db.RemoveFav(address);
 
-            feedItems = new ArrayList<>();
-            Element root = data.getDocumentElement();
-            Node channel = root.getChildNodes().item(1);
-            NodeList items = channel.getChildNodes();
+            try {
 
-            String title, desc, pubdate, link, rsslink, thumbURL;
+                JSONObject jsonObj = new JSONObject(jsonstring);
+                JSONArray reviews = jsonObj.getJSONArray("articles");
 
-            for (int i = 0; i < items.getLength(); i++) {
-                Node currentChild = items.item(i);
+                for (int i = 0; i < reviews.length(); i++) {
 
-                title = "";
-                desc = "";
-                pubdate = "";
-                link = "";
-                thumbURL = "";
+                    JSONObject c = reviews.getJSONObject(i);
 
-                rsslink = address;
+                    String title = c.getString("title");
+                    String desc = c.getString("description");
+                    String thumb = c.getString("urlToImage");
+                    String pubDate = c.getString("publishedAt");
+                    String url = c.getString("url");
 
-                if (currentChild.getNodeName().equalsIgnoreCase("item")) {
-                    FeedItem feedItem = new FeedItem();
-                    NodeList itemChilds = currentChild.getChildNodes();
-                    for (int j = 0; j < itemChilds.getLength(); j++) {
-                        Node current = itemChilds.item(j);
+                    FeedItem adata = new FeedItem();
 
-                        if (current.getNodeName().equalsIgnoreCase("title")) {
-                            feedItem.setTitle(current.getTextContent());
-                            title = current.getTextContent();
-                        } else if (current.getNodeName().equalsIgnoreCase("pubDate")) {
-                            feedItem.setPubDate(current.getTextContent());
-                            pubdate = current.getTextContent();
-                        } else if (current.getNodeName().equalsIgnoreCase("link")) {
-                            feedItem.setLink(current.getTextContent());
-                            link = current.getTextContent();
-                        } else if (current.getNodeName().equalsIgnoreCase("description")) {
-                            feedItem.setDescription(current.getTextContent());
-                            desc = current.getTextContent();
+                    adata.setTitle(title);
+                    adata.setDescription(desc);
+                    adata.setThumbURL(thumb);
+                    adata.setPubDate(pubDate);
+                    adata.setLink(url);
 
-                            Matcher matcher = Pattern.compile("src=\"([^\"]+)").matcher(current.getTextContent());
-
-                            if (matcher.find()) {
-                                feedItem.setThumbURL(matcher.group(1));
-                                thumbURL = matcher.group(1);
-                            } else {
-                                feedItem.setThumbURL("none");
-                                thumbURL = "none";
-                            }
-                        }
-                    }
-
-                    db.AddtoFavorite(new OfflineItem(title, desc, pubdate, link, thumbURL, rsslink));
-                    feedItems.add(feedItem);
+                    feedItems.add(adata);
+                    db.AddtoFavorite(new OfflineItem(title, desc, pubDate, url, thumb, rsslink));
                 }
+
+            } catch (final JSONException e) {
+
+                Log.e("Json parsing error: ", e.getMessage());
+
             }
 
         }
     }
 
+    public String GetData() {
 
-    public Document GetData() {
-        HttpURLConnection connection = null;
-        ;
-        try {
-            url = new URL(address);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            InputStream inputStream = connection.getInputStream();
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
-            Document xmlDoc = builder.parse(inputStream);
-            connection.disconnect();
-            return xmlDoc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
+        String url = address;
+
+        GetJSON getJSON = new GetJSON();
+
+        String jsonStr = getJSON.getJSON(url, 5000);
+
+        return jsonStr;
+
     }
 
     @Override

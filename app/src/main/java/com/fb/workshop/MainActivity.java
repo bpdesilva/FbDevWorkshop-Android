@@ -67,10 +67,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 phoneLogin();
-                
+
             }
         });
-
 
         loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
