@@ -7,25 +7,36 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.fb.workshop.newsfeed.NewsActivity;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     public static int APP_REQUEST_CODE = 99;
     Button btnFB, btnEmail, btnMobile;
+    private static final String EMAIL = "email";
+    LoginButton loginButton;
+    CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnFB = findViewById(R.id.btnFB);
+        callbackManager = CallbackManager.Factory.create();
 
         btnEmail = findViewById(R.id.btnEmail);
 
@@ -35,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (accessToken != null) {
 
-            Intent i = new Intent(MainActivity.this, NewsActivity.class);
-            startActivity(i);
+            loginRedirect();
 
         } else {
 
@@ -44,12 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        btnFB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         btnEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +67,55 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 phoneLogin();
+                
             }
         });
+
+
+        loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        loginRedirect();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
+
+
     }
 
     public void phoneLogin() {
@@ -98,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             final int requestCode,
             final int resultCode,
             final Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
             AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
@@ -127,8 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 // and pass it to your server and exchange it for an access token.
 
                 // Success! Start your next activity...
-                Intent i = new Intent(MainActivity.this, NewsActivity.class);
-                startActivity(i);
+                loginRedirect();
 
             }
 
@@ -139,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG)
                     .show();
         }
+    }
+
+    private void loginRedirect() {
+        Intent i = new Intent(MainActivity.this, NewsActivity.class);
+        startActivity(i);
     }
 
 }
