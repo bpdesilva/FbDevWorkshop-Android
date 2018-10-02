@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dev Circles Workshop</string>
+    <string name="FACEBOOK_APP_ID">1969565793109226</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">1a6629748101f245e19eb0dcfe5cb4bc</string>
+    <string name="ak_login_protocol_scheme">ak1969565793109226</string>
+    <string name="fb_login_protocol_scheme">fb1969565793109226</string>
+</resources>
