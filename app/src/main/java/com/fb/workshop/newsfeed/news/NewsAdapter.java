@@ -2,6 +2,7 @@ package com.fb.workshop.newsfeed.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.fb.workshop.R;
 import com.fb.workshop.newsfeed.NewsDetail;
 import com.squareup.picasso.Picasso;
@@ -23,6 +26,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     ArrayList<FeedItem> feedItems;
     Context context;
+    AppEventsLogger logger;
 
     public NewsAdapter(Context context, ArrayList<FeedItem> feedItems, RecyclerView rv) {
         this.feedItems = feedItems;
@@ -49,6 +53,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         View view = LayoutInflater.from(context).inflate(R.layout.news_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
+        logger = AppEventsLogger.newLogger(context);
         return holder;
 
     }
@@ -67,6 +72,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Bundle parameters = new Bundle();
+                parameters.putString(AppEventsConstants.EVENT_PARAM_CONTENT, current.getTitle());
+                logger.logEvent("Open Article", parameters);
+
                 Intent intent = new Intent(context, NewsDetail.class);
                 intent.putExtra("description", current.getDescription());
                 intent.putExtra("title", current.getTitle());

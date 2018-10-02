@@ -31,4 +31,5 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.11.2'
     implementation 'com.facebook.android:account-kit-sdk:4.+'
     implementation 'com.facebook.android:facebook-login:[4,5)'
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
