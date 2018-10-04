@@ -10,8 +10,6 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.accountkit.AccessToken;
-import com.facebook.accountkit.AccountKit;
 import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
@@ -19,14 +17,13 @@ import com.facebook.accountkit.ui.LoginType;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.fb.workshop.newsfeed.NewsActivity;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     public static int APP_REQUEST_CODE = 99;
-    Button btnFB, btnEmail, btnMobile;
+    Button btnEmail, btnMobile;
     private static final String EMAIL = "email";
     LoginButton loginButton;
     CallbackManager callbackManager;
@@ -36,24 +33,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        callbackManager = CallbackManager.Factory.create();
-
         btnEmail = findViewById(R.id.btnEmail);
-
         btnMobile = findViewById(R.id.btnPhone);
+        loginButton = findViewById(R.id.login_button);
 
-        AccessToken accessToken = AccountKit.getCurrentAccessToken();
-
-        if (accessToken != null) {
-
-            loginRedirect();
-
-        } else {
-
-            //Handle new or logged out user
-
-        }
-
+        callbackManager = CallbackManager.Factory.create();
 
         btnEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,17 +45,14 @@ public class MainActivity extends AppCompatActivity {
                 emailLogin();
             }
         });
-
         btnMobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 phoneLogin();
-
             }
         });
 
-        loginButton = findViewById(R.id.login_button);
+
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
@@ -113,10 +94,9 @@ public class MainActivity extends AppCompatActivity {
                         // App code
                     }
                 });
-
-
     }
 
+    //Handle mobile login
     public void phoneLogin() {
         final Intent intent = new Intent(MainActivity.this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
@@ -130,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, APP_REQUEST_CODE);
     }
 
+    //Handle email login
     public void emailLogin() {
         final Intent intent = new Intent(MainActivity.this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
@@ -143,11 +124,9 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, APP_REQUEST_CODE);
     }
 
+    //Callback result
     @Override
-    protected void onActivityResult(
-            final int requestCode,
-            final int resultCode,
-            final Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
@@ -191,9 +170,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Begin add interest activity
     private void loginRedirect() {
-        Intent i = new Intent(MainActivity.this, NewsActivity.class);
+        Intent i = new Intent(MainActivity.this, AddInterests.class);
         startActivity(i);
+        finish();
     }
 
 }

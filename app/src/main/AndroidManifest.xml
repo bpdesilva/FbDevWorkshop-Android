@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".AddInterests"></activity>
+
+        <activity android:name=".newsfeed.NewsActivity" />
+
+        <activity android:name=".newsfeed.NewsDetail" />
 
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
@@ -30,10 +35,6 @@
         <meta-data
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
-
-        <activity android:name=".newsfeed.NewsActivity" />
-
-        <activity android:name=".newsfeed.NewsDetail" />
 
         <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
 
@@ -56,6 +57,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -73,9 +75,11 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/FACEBOOK_APP_ID" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1969565793109226"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider1969565793109226"
+            android:exported="true" />
+
 
     </application>
 

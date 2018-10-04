@@ -33,4 +33,5 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[4,5)'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.facebook.android:facebook-share:[4,5)'
+    implementation 'com.robertlevonyan.view:MaterialChipView:1.2.4'
 }

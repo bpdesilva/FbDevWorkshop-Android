@@ -2,22 +2,17 @@ package com.fb.workshop.newsfeed.news;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.fb.workshop.R;
 import com.fb.workshop.newsfeed.NewsDetail;
 import com.squareup.picasso.Picasso;
@@ -72,12 +67,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         //holder.Date.setText(formattedDate);
         holder.Date.setText(current.getPubDate());
 
-        Picasso.with(context).load(current.getThumbURL()).placeholder(R.drawable.sample).into(holder.ThumbNail);
+        if (current.getThumbURL().length() != 0) {
+            Picasso.with(context).load(current.getThumbURL()).placeholder(R.drawable.sample).into(holder.ThumbNail);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                //Log to facebook analytics here (article hit stats)
                 Bundle parameters = new Bundle();
                 parameters.putString(AppEventsConstants.EVENT_PARAM_CONTENT, current.getTitle());
                 logger.logEvent("Open Article", parameters);
@@ -90,11 +88,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
                 intent.putExtra("image", current.getThumbURL());
                 intent.putExtra("url", current.getLink());
                 context.startActivity(intent);
+
             }
         });
-
-
-
     }
 
     @Override
@@ -111,9 +107,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         ImageView ThumbNail;
         public MyViewHolder(View itemView) {
             super(itemView);
-            Title = (TextView) itemView.findViewById(R.id.tvNewsTitle);
-            Date = (TextView) itemView.findViewById(R.id.tvNewsTime);
-            ThumbNail = (ImageView) itemView.findViewById(R.id.tvNewsThumb);
+            Title = itemView.findViewById(R.id.tvNewsTitle);
+            Date = itemView.findViewById(R.id.tvNewsTime);
+            ThumbNail = itemView.findViewById(R.id.tvNewsThumb);
         }
     }
 

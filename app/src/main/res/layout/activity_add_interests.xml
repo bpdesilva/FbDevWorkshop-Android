@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".AddInterests">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:fontFamily="@font/product_sans_regular"
+        android:text="Pick your interest"
+        android:textColor="#000"
+        android:textSize="25sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnTech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Technology"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnBusiness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Business"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnPolitics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Politics"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnEntertainement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Entertainement"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnBitcoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:mcv_chipText="Bitcoin"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnAI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="AI"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Music"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnHollywood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Hollywood"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnBollywood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:mcv_chipText="Bollywood"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+            <com.robertlevonyan.views.chip.Chip
+                android:id="@+id/btnBlockchain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:mcv_chipText="Blockchain"
+                app:mcv_selectable="true"
+                app:mcv_selectedBackgroundColor="@color/colorPrimary" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
