@@ -2,7 +2,6 @@ package com.fb.workshop.newsfeed.news;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.appevents.AppEventsConstants;
-import com.facebook.appevents.AppEventsLogger;
 import com.fb.workshop.R;
 import com.fb.workshop.newsfeed.NewsDetail;
 import com.squareup.picasso.Picasso;
@@ -26,7 +23,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
     ArrayList<FeedItem> feedItems;
     Context context;
-    AppEventsLogger logger;
 
     public NewsAdapter(Context context, ArrayList<FeedItem> feedItems, RecyclerView rv) {
         this.feedItems = feedItems;
@@ -53,7 +49,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         View view = LayoutInflater.from(context).inflate(R.layout.news_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
-        logger = AppEventsLogger.newLogger(context);
+
         return holder;
 
     }
@@ -67,15 +63,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         //holder.Date.setText(formattedDate);
         holder.Date.setText(current.getPubDate());
 
-        Picasso.with(context).load(current.getThumbURL()).placeholder(R.drawable.sample).into(holder.ThumbNail);
+        if (current.getThumbURL().length() != 0) {
+            Picasso.with(context).load(current.getThumbURL()).placeholder(R.drawable.sample).into(holder.ThumbNail);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Bundle parameters = new Bundle();
-                parameters.putString(AppEventsConstants.EVENT_PARAM_CONTENT, current.getTitle());
-                logger.logEvent("Open Article", parameters);
+                //Log to facebook analytics here (article hit stats)
+                ///////////
+
+
 
                 Intent intent = new Intent(context, NewsDetail.class);
                 intent.putExtra("description", current.getDescription());
@@ -83,11 +82,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
                 //intent.putExtra("date", formattedDate);
                 intent.putExtra("date", current.getPubDate());
                 intent.putExtra("image", current.getThumbURL());
+                intent.putExtra("url", current.getLink());
                 context.startActivity(intent);
+
             }
         });
-
-
     }
 
     @Override
@@ -102,12 +101,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView Title, Date;
         ImageView ThumbNail;
-
         public MyViewHolder(View itemView) {
             super(itemView);
-            Title = (TextView) itemView.findViewById(R.id.tvNewsTitle);
-            Date = (TextView) itemView.findViewById(R.id.tvNewsTime);
-            ThumbNail = (ImageView) itemView.findViewById(R.id.tvNewsThumb);
+            Title = itemView.findViewById(R.id.tvNewsTitle);
+            Date = itemView.findViewById(R.id.tvNewsTime);
+            ThumbNail = itemView.findViewById(R.id.tvNewsThumb);
         }
     }
 

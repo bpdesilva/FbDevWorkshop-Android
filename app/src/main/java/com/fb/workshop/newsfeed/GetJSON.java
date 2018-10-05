@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Suresh on 6/9/2017.
+ * Created by Suresh.
  */
 
 public class GetJSON {

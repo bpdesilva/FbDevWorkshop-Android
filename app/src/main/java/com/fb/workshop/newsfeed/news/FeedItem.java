@@ -54,4 +54,5 @@ public class FeedItem {
     public void setThumbURL(String thumbURL) {
         this._thumbURL = thumbURL;
     }
+
 }

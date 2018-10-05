@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#3B5998</color>
+    <color name="colorPrimaryDark">#293e6b</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorWhite">#FFF</color>
+
+    <color name="fui_bgGoogle">#ffffff</color>
+    <color name="fui_bgFacebook">#3B5998</color>
+    <color name="fui_bgTwitter">#FF5BAAF4</color>
+    <color name="fui_bgGitHub">#24292E</color>
+    <color name="fui_bgEmail">#D0021B</color>
+    <color name="fui_bgPhone">#43C5A5</color>
+    <color name="fui_bgAnonymous">#f4b400</color>
+    <color name="fui_buttonShadow">#64BEBEBE</color>
 </resources>
