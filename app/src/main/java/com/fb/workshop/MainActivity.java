@@ -9,6 +9,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     Button btnEmail, btnMobile;
+    String username, picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
     //Begin add interest activity
     private void loginRedirect() {
         Intent i = new Intent(MainActivity.this, AddInterests.class);
+
+        if(username != null){
+            i.putExtra("username",username);
+        }
+
+        if(picture != null){
+            i.putExtra("picture",picture);
+        }
+
         startActivity(i);
         finish();
     }
