@@ -37,7 +37,7 @@ public class NewsActivity extends AppCompatActivity {
         String interestlist = intent.getStringExtra("interests");
 
         readRSS = new ReadNews(NewsActivity.this, recyclerView, "\n" +
-                "https://newsapi.org/v2/everything?q=" + Uri.encode(interestlist) + "&from=2018-09-04&sortBy=publishedAt&apiKey=daa06f7e6b084d0bb95a4512483aff03");
+                "https://newsapi.org/v2/everything?q=" + Uri.encode(interestlist) + "&from=2018-09-05&sortBy=publishedAt&apiKey=daa06f7e6b084d0bb95a4512483aff03");
         readRSS.execute();
 
     }
