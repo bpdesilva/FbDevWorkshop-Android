@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
@@ -18,15 +20,23 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     public static int APP_REQUEST_CODE = 99;
     Button btnEmail, btnMobile;
+
     private static final String EMAIL = "email";
+    private static final String PUBLIC_PROFILE = "public_profile";
+
     LoginButton loginButton;
     CallbackManager callbackManager;
+
+    String username, picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        loginButton.setReadPermissions(Arrays.asList(EMAIL,PUBLIC_PROFILE));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
         // Callback registration
@@ -81,7 +91,33 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        loginRedirect();
+
+                        String account_id = loginResult.getAccessToken().getApplicationId();
+
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        // Insert your code here
+                                        try {
+
+                                            username = object.getString("name");
+                                            picture = object.getJSONObject("picture").getJSONObject("data").getString("url");
+
+                                            loginRedirect();
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,picture");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+
                     }
 
                     @Override
@@ -95,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     //Handle mobile login
     public void phoneLogin() {
@@ -144,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (loginResult.wasCancelled()) {
                 toastMessage = "Login Cancelled";
             } else {
+
                 if (loginResult.getAccessToken() != null) {
                     toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
                 } else {
@@ -156,8 +194,11 @@ public class MainActivity extends AppCompatActivity {
                 // loginResult.getAuthorizationCode()
                 // and pass it to your server and exchange it for an access token.
 
+
                 // Success! Start your next activity...
                 loginRedirect();
+
+
 
             }
 
@@ -172,9 +213,20 @@ public class MainActivity extends AppCompatActivity {
 
     //Begin add interest activity
     private void loginRedirect() {
+
         Intent i = new Intent(MainActivity.this, AddInterests.class);
+
+        if(username != null){
+            i.putExtra("username",username);
+        }
+
+        if(picture != null){
+            i.putExtra("picture",picture);
+        }
+
         startActivity(i);
         finish();
+
     }
 
 }
